@@ -1,17 +1,22 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <input
+      name="test"
+      v-vld="'required'"
+      scope="myScoped"
+      v-model="waitForValidate"
+    />
+    <div id="show-error">{{ errList["test"] }}</div>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
 export default {
   name: "App",
-  components: {
-    HelloWorld,
+  data() {
+    return {
+      waitForValidate: "",
+    };
   },
 };
 </script>
