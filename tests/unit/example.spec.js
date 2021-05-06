@@ -15,10 +15,10 @@ describe("v-vld", () => {
   it("error show", async () => {
     const input = wrapper.find('input[name="test"]');
     input.setValue("111122");
-    await input.trigger("blur");
+    await input.trigger("change");
     input.setValue("");
-    await input.trigger("blur");
+    await input.trigger("change");
     const errorBox = wrapper.find("#show-error");
-    expect(errorBox.html()).toBe("<div><p>Foo</p></div>");
+    expect(errorBox.html()).toBe('<div id="show-error">test不能为空</div>');
   });
 });

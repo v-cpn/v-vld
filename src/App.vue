@@ -7,6 +7,8 @@
       v-model="waitForValidate"
     />
     <div id="show-error">{{ errList["test"] }}</div>
+    <button @click="onValidate">校验</button>
+    <button @click="onClear">清除校验错误</button>
   </div>
 </template>
 
@@ -18,16 +20,22 @@ export default {
       waitForValidate: "",
     };
   },
+  methods: {
+    onValidate() {
+      this.$vld();
+    },
+    onClear() {
+      this.$vldClr();
+    },
+  },
 };
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+#show-error {
+  color: red;
 }
 </style>
