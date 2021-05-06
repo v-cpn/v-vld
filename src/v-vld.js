@@ -24,10 +24,10 @@ const trimNumber = (name) => {
   return name.match(/^\D+/)[0]
 }
 
-const validate = (val, vldsName) => {
-  // vldsName eg. required|gt0|gtX:3000
-  console.log('validate', val, vldsName)
-  const vlds = vldsName.split('|')
+const validate = (val, vld) => {
+  // vld eg. required|gt0|gtX:3000
+  console.log('value: ', val, 'vld: ', vld)
+  const vlds = vld.split('|')
   for (let i = 0; i < vlds.length; i++) {
     let vldItem = vlds[i]
     const [vldName, ...params] = vldItem.split(':')
@@ -59,27 +59,28 @@ const createInfo = (binding, vnode) => {
     if (elm._uid) id = elm._uid
     else id = elm._uid = +new Date()
   }
-  return { id, vm, elm, ctx, scope, name, vld: binding.value }
+  const data = { id, vm, elm, ctx, scope, name, vld: binding.value }
+  // 用 id 区分不同组件
+  fieldList[id] = data
+  return data
 }
 
-Vld.extend = function (name, validateFunc, messageFunc) {
-  vldType[name] = validateFunc
-  vldMsg[name] = messageFunc
+Vld.extend = function (typeName, validateFunc, messageFunc) {
+  vldType[typeName] = validateFunc
+  vldMsg[typeName] = messageFunc
 }
+
 Vld.install = function (Vue) {
   Vue.directive('vld', {
     bind(el, binding, vnode) {
       const data = createInfo(binding, vnode)
-      const { id, vm, ctx, name, elm } = data
-      // 用 id 区分不同组件
-      fieldList[id] = data
+      const { vm, ctx, name, elm } = data
       ctx.$delete(ctx.errList, name)
       if (vm) {
         vm.$watch('value', function (val) {
           // vld must be dynamic
           if (!data.vld) return
           let [res, resType] = validate(val, data.vld)
-          console.log(res, resType)
           if (res) {
             ctx.$delete(ctx.errList, name)
           } else {
@@ -122,8 +123,9 @@ Vld.install = function (Vue) {
         ctx.$delete(ctx.errList, name)
       }
     },
-    unbind: function (el, binding, vnode) {
-      const { id, ctx, name } = createInfo(binding, vnode)
+    unbind: function (el) {
+      const id = el._uid || el.__vue__._uid
+      const { ctx, name } = fieldList[id]
       ctx.$delete(ctx.errList, name) // 清除现有的错误记录
       delete fieldList[id]
     },
@@ -154,6 +156,7 @@ Vld.install = function (Vue) {
       } else {
         val = elm.value
       }
+      console.log(name)
       let [res, resType] = validate(val, vld)
       if (res) {
         ctx.$delete(ctx.errList, name)
