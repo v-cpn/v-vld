@@ -8,15 +8,11 @@
 let Vld = {}
 let vldType = {
   required: (v) => v !== null && v !== undefined && v !== '',
-  gt0: (v) => v > 0,
-  gtX: (v, x) => v > x,
-  ltX: (v, x) => v < x,
+  gt0: (v) => Number(v) > 0,
 }
 let vldMsg = {
   required: (name) => name + '不能为空',
   gt0: (name) => name + '必须大于 0',
-  gtX: (name) => name + '必须大于 X',
-  ltX: (name) => name + '必须小于 X',
 }
 let fieldList = {}
 
