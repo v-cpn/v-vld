@@ -32,7 +32,7 @@ Vue.use(Vld)
 
 ## 自定义校验
 
-在使用自定义校验前，先通过 `Vld.extend` 拓展校验方法。
+在使用自定义校验前，先通过 `Vld.extend` 拓展校验方法。如果你需要一个校验输入数值小于 999 的方法，可以这么写（注意把 v 转换为数字）：
 
 ```javascript
 Vld.extend(
@@ -115,7 +115,16 @@ this.$vld(scope)
 ]
 ```
 
-你可以利用 `field` 定位目标输入框：
+通过判断返回数组的长度就能知道校验是否通过：
+
+```javascript
+let v = this.$vld()
+if (v.length > 0) {
+  // 提醒未填完
+}
+```
+
+另外，你还可以利用 `field` 定位目标输入框：
 
 ```javascript
 document.querySelector(`[name="${field}"]`).scrollIntoView()
@@ -139,4 +148,15 @@ this.$vldClr(scope)
 <script>
   this.$refs.inputGroup.$vld()
 </script>
+```
+
+校验多个组件也是同样思路：
+
+```javascript
+let v1 = this.$refs.group1.$vld()
+let v2 = this.$refs.group2.$vld()
+let v3 = this.$refs.group3.$vld()
+if ([...v1, ...v2, ...v3].length > 0) {
+  // 提醒未填完
+}
 ```
