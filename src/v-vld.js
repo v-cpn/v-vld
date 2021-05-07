@@ -22,7 +22,7 @@ const trimNumber = (name) => {
 
 const validate = (val, vld) => {
   // vld eg. required|gt0|gtX:3000
-  console.log('value: ', val, 'vld: ', vld)
+  // console.log('value: ', val, 'vld: ', vld)
   const vlds = vld.split('|')
   for (let i = 0; i < vlds.length; i++) {
     let vldItem = vlds[i]
@@ -130,7 +130,7 @@ Vld.install = function (Vue) {
   Vue.mixin({
     data: function () {
       return {
-        errList: {},
+        errList: {}, // 放置错误提示
       }
     },
   })
@@ -152,7 +152,7 @@ Vld.install = function (Vue) {
       } else {
         val = elm.value
       }
-      console.log(name)
+      // console.log(name)
       let [res, resType] = validate(val, vld)
       if (res) {
         ctx.$delete(ctx.errList, name)
